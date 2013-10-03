@@ -11,6 +11,6 @@ Pour ajouter ce PartModule a un Part, modifier le fichier part.cfg et y ajouter 
 ```
 MODULE
 {
-   name = Autopilot
+   name = Telemeter
 }
 ```
