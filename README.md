@@ -1,7 +1,7 @@
 Telemeter
 =========
 
-Télémétrie en LAN
+Télémétrie en LAN - fonctionne avec KSPMissionControl https://github.com/kerbalspaceprogram-fr/KSPMissionControl
 
 Références à importer :
 - Assembly-CSharp.dll
