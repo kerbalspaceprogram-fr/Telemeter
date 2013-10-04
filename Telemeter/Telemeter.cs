@@ -21,7 +21,7 @@ namespace Telemeter
 		private static int port = Telemeter.DEFAULT_PORT;
 		private bool transmission = false;
 		private static string temp_ip_address = Telemeter.DEFAULT_IP_ADDRESS;
-		private static int temp_port = Telemeter.DEFAULT_PORT;
+		//private static int temp_port = Telemeter.DEFAULT_PORT;
 		private bool temp_transmission = false;
 		private Rect windowPos;
 		private static Socket socket = null;
@@ -101,48 +101,47 @@ namespace Telemeter
 				socket.Send (buffer, buffer.Length, SocketFlags.None);
 		}
 
-		public void drawConfiguration ()
+		public void DrawConfiguration ()
 		{
 			GUI.skin = HighLogic.Skin;
-			this.windowPos = GUILayout.Window (1, this.windowPos, this.ConfigurationGUI, "Telemetry configuration", GUILayout.MinWidth (100));
+			this.windowPos = GUILayout.Window (1, this.windowPos, this.ConfigurationGUI, "Telemetry configuration", GUILayout.ExpandWidth (true), GUILayout.MinWidth (200));
 		}
 
 		public void ConfigurationGUI (int windowID)
 		{
-			GUIStyle mySty = new GUIStyle (GUI.skin.button);
-			mySty.normal.textColor = mySty.focused.textColor = Color.white;
-			mySty.hover.textColor = mySty.active.textColor = Color.yellow;
-			mySty.onNormal.textColor = mySty.onFocused.textColor = mySty.onHover.textColor = mySty.onActive.textColor = Color.green;
-			mySty.padding = new RectOffset (8, 8, 8, 8);
 
 			GUILayout.BeginVertical ();
 
 			GUILayout.BeginHorizontal ();
-			GUILayout.Label ("IP address :", mySty, GUILayout.ExpandWidth (true));
-			Telemeter.temp_ip_address = GUILayout.TextField (Telemeter.temp_ip_address, mySty, GUILayout.ExpandWidth (true));
+			GUILayout.Label ("IP address :", GUILayout.ExpandWidth (true));
+			Telemeter.temp_ip_address = GUILayout.TextField (Telemeter.temp_ip_address, GUILayout.ExpandWidth (true));
 			GUILayout.EndHorizontal ();
+
+			/*
 			GUILayout.BeginHorizontal ();
-			GUILayout.Label ("Port :", mySty, GUILayout.ExpandWidth (true));
+			GUILayout.Label ("Port :", GUILayout.ExpandWidth (true));
 			try {
-				Telemeter.temp_port = int.Parse (GUILayout.TextField (Convert.ToString (Telemeter.temp_port), mySty, GUILayout.ExpandWidth (true)));
+				Telemeter.temp_port = int.Parse (GUILayout.TextField (Convert.ToString (Telemeter.temp_port), GUILayout.ExpandWidth (true)));
 			} catch (Exception ex) {
 				print (ex.Message);
 			}
 			GUILayout.EndHorizontal ();
+			*/
+
 			GUILayout.BeginHorizontal ();
-			GUILayout.Label ("Status :", mySty, GUILayout.ExpandWidth (true));
-			this.temp_transmission = GUILayout.Toggle (this.temp_transmission, this.temp_transmission ? "Online" : "Offline", mySty, GUILayout.ExpandWidth (true));
+			GUILayout.Label ("Status :", GUILayout.ExpandWidth (true));
+			this.temp_transmission = GUILayout.Toggle (this.temp_transmission, this.temp_transmission ? "Online" : "Offline", GUILayout.ExpandWidth (true));
 			GUILayout.EndHorizontal ();
 
 			GUILayout.BeginHorizontal ();
-			if (GUILayout.Button ("Cancel", mySty, GUILayout.ExpandWidth (true))) {
-				RenderingManager.RemoveFromPostDrawQueue (3, new Callback (drawConfiguration));
+			if (GUILayout.Button ("Cancel", GUILayout.ExpandWidth (true))) {
+				RenderingManager.RemoveFromPostDrawQueue (3, new Callback (DrawConfiguration));
 				Telemeter.temp_ip_address = Telemeter.ip_address;
-				Telemeter.temp_port = Telemeter.port;
+				//Telemeter.temp_port = Telemeter.port;
 				this.temp_transmission = this.transmission;
 			}
-			if (GUILayout.Button ("Ok", mySty, GUILayout.ExpandWidth (true))) {
-				RenderingManager.RemoveFromPostDrawQueue (3, new Callback (drawConfiguration));
+			if (GUILayout.Button ("Ok", GUILayout.ExpandWidth (true))) {
+				RenderingManager.RemoveFromPostDrawQueue (3, new Callback (DrawConfiguration));
 				Telemeter.ip_address = Telemeter.temp_ip_address;
 				Telemeter.port = Telemeter.DEFAULT_PORT;
 				this.transmission = this.temp_transmission;
@@ -157,15 +156,16 @@ namespace Telemeter
 				}
 			}
 			GUILayout.EndHorizontal ();
+
 			GUILayout.EndVertical ();
 
 			GUI.DragWindow (new Rect (0, 0, 10000, 20));
 		}
 
-		[KSPEvent(guiActive = true, guiName = "configuration")]
+		[KSPEvent(guiActive = true, guiName = "Telemetry configuration")]
 		public void Configuration ()
 		{
-			RenderingManager.AddToPostDrawQueue (3, new Callback (drawConfiguration));
+			RenderingManager.AddToPostDrawQueue (3, new Callback (DrawConfiguration));
 		}
 	}
 }
